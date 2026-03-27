@@ -1,7 +1,23 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,  // required — NestJS uses decorators everywhere (@Module, @Controller etc.)
-    "emitDecoratorMetadata": true,   // required — enables dependency injection to work
-    "strictNullChecks": false        // you can flip this to true later for stricter TypeScript
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2017",
+    "lib": ["ES2017", "dom"],
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "types": ["node", "jest"]
   }
 }

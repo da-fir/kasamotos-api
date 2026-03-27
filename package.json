@@ -1,14 +1,18 @@
 {
   "scripts": {
     "start:dev": "nest start --watch",
-    "build":     "nest build",
-    "start:prod":"node dist/main",
-    "test":      "jest"
+    "build": "nest build",
+    "start:prod": "node dist/main",
+    "test": "jest"
   },
   "dependencies": {
-    // what ships to production
+    "@nestjs/common": "^11.1.17",
+    "@nestjs/config": "^4.0.3",
+    "@nestjs/core": "^11.1.17",
+    "@nestjs/platform-express": "^11.1.17"
   },
   "devDependencies": {
-    // only used during development (TypeScript, Jest, etc.)
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.5.0"
   }
 }
