@@ -6,14 +6,19 @@
     "test": "jest"
   },
   "dependencies": {
-    "@nestjs/cli": "^11.0.16",
-    "@nestjs/common": "^11.1.17",
-    "@nestjs/config": "^4.0.3",
-    "@nestjs/core": "^11.1.17",
-    "@nestjs/platform-express": "^11.1.17"
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@prisma/client": "^5.22.0",
+    "prisma": "^5.22.0"
   },
   "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "@types/node": "^25.5.0"
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/testing": "^11.0.0",
+    "@types/jest": "^29.0.0",
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
   }
 }

@@ -54,3 +54,5 @@ prisma/migrations/dev.db
 # Compiled JS in src (should never exist)
 src/**/*.js
 src/**/*.js.map
+/generated/prisma
+prisma/migrations/*.db

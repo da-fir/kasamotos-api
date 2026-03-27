@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Dish {
+  id          String   @id @default(uuid())
+  name        String
+  ingredients Json
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("dishes")
+}
