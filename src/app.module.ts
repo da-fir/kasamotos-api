@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './common/database/database.module';
+import { DishModule } from './modules/dish/dish.module';
 
 
 @Module({
@@ -10,6 +11,7 @@ import { DatabaseModule } from './common/database/database.module';
       envFilePath: '.env',
     }),
     DatabaseModule,
+    DishModule,
   ],
 })
 export class AppModule {}
