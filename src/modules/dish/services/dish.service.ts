@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { DishRepository } from '../repositories/dish.repository';
+import { AiService } from '../../ai/services/ai.service';
 import { CreateDishDto } from '../dto/create-dish.dto';
 
 @Injectable()
 export class DishService {
-  constructor(private readonly dishRepository: DishRepository) {}
-
+  constructor(
+    private readonly dishRepository: DishRepository,
+    private readonly aiService: AiService,
+) {}
+  
+s
   async create(dto: CreateDishDto) {
-    // hardcoded for now — AI replaces this in Step 6
-    const ingredients = ['ingredient 1', 'ingredient 2', 'ingredient 3'];
+    const { ingredients } = await this.aiService.getIngredients(dto.name);
     return this.dishRepository.create(dto, ingredients);
   }
 
