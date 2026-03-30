@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { DishRepository } from '../repositories/dish.repository';
 import { AiService } from '../../ai/services/ai.service';
 import { CreateDishDto } from '../dto/create-dish.dto';
+import { DishNotFoundException } from '../../../common/exceptions/dish-not-found.exception';
+
 
 @Injectable()
 export class DishService {
@@ -10,7 +12,6 @@ export class DishService {
     private readonly aiService: AiService,
 ) {}
   
-s
   async create(dto: CreateDishDto) {
     const { ingredients } = await this.aiService.getIngredients(dto.name);
     return this.dishRepository.create(dto, ingredients);
@@ -21,6 +22,8 @@ s
   }
 
   async findById(id: string) {
-    return this.dishRepository.findById(id);
+    const dish = await this.dishRepository.findById(id);
+    if (!dish) throw new DishNotFoundException(id);
+    return dish;
   }
 }

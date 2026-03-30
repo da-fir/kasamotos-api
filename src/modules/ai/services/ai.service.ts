@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AiIngredientsResponseDto } from '../dto/ai-response.dto';
+import { AiServiceException } from '../../../common/exceptions/ai-service.exception';
 
 @Injectable()
 export class AiService {
@@ -29,12 +30,11 @@ export class AiService {
 
       const result = await model.generateContent(prompt);
       const text = result.response.text().trim();
-
       const parsed = JSON.parse(text) as AiIngredientsResponseDto;
       return parsed;
     } catch (error) {
-      this.logger.error(`Failed to get ingredients for ${dishName}`, error);
-      throw error;
+      this.logger.error(`Gemini failed for dish: ${dishName}`, error);
+      throw new AiServiceException('Failed to generate ingredients');
     }
   }
 }
