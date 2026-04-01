@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './common/database/database.module';
-import { DishModule } from './modules/dish/dish.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-
+import { DatabaseModule } from './common/database/database.module';
+import { LoggerModule } from './common/logger/logger.module';
+import { DishModule } from './modules/dish/dish.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,   // no need to import ConfigModule in every feature module
+      isGlobal: true,
       envFilePath: '.env',
     }),
     ThrottlerModule.forRoot([
@@ -19,12 +19,13 @@ import { APP_GUARD } from '@nestjs/core';
       },
     ]),
     DatabaseModule,
+    LoggerModule,
     DishModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard, 
+      useClass: ThrottlerGuard,
     },
   ],
 })
