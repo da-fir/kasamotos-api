@@ -17,11 +17,20 @@ async function bootstrap() {
   // Security
   app.use(helmet());
   app.enableCors({
-    origin:
-      process.env.NODE_ENV === 'production'
-        ? process.env.FRONTEND_URL
-        : 'http://localhost:3001',
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        process.env.FRONTEND_URL?.replace(/\/$/, ''), // strip trailing slash
+        'http://localhost:3001',
+      ];
+  
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ['GET', 'POST'],
+    credentials: true,
   });
   app.use(require('express').json({ limit: '10kb' }));
 
