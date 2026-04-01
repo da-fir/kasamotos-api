@@ -4,17 +4,26 @@ import { AiService } from '../../ai/services/ai.service';
 import { CreateDishDto } from '../dto/create-dish.dto';
 import { DishNotFoundException } from '../../../common/exceptions/dish-not-found.exception';
 
-
 @Injectable()
 export class DishService {
   constructor(
     private readonly dishRepository: DishRepository,
     private readonly aiService: AiService,
-) {}
-  
+  ) {}
+
   async create(dto: CreateDishDto) {
-    const { ingredients } = await this.aiService.getIngredients(dto.name);
-    return this.dishRepository.create(dto, ingredients);
+    const normalizedName = dto.name.toLowerCase().trim();
+
+    // Check DB first — skip Gemini if already exists
+    const existing = await this.dishRepository.findByName(normalizedName);
+    if (existing) return existing;
+
+    // Not found — call Gemini
+    const { ingredients } = await this.aiService.getIngredients(normalizedName);
+    return this.dishRepository.create(
+      { name: normalizedName },
+      ingredients,
+    );
   }
 
   async findAll() {

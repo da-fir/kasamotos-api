@@ -8,6 +8,7 @@ const mockDishRepository = {
   create: jest.fn(),
   findAll: jest.fn(),
   findById: jest.fn(),
+  findByName: jest.fn(),
 };
 
 const mockAiService = {
@@ -35,16 +36,21 @@ describe('DishService', () => {
   describe('create', () => {
     it('should call AiService and save dish', async () => {
       const dto = { name: 'Nasi Goreng' };
+      const normalizedName = 'nasi goreng'; // ← normalized
       const ingredients = ['rice', 'egg', 'soy sauce'];
-      const savedDish = { id: 'uuid', name: 'Nasi Goreng', ingredients };
-
+      const savedDish = { id: 'uuid', name: normalizedName, ingredients };
+    
+      mockDishRepository.findByName.mockResolvedValue(null); // ← not cached
       mockAiService.getIngredients.mockResolvedValue({ ingredients });
       mockDishRepository.create.mockResolvedValue(savedDish);
-
+    
       const result = await service.create(dto);
-
-      expect(mockAiService.getIngredients).toHaveBeenCalledWith('Nasi Goreng');
-      expect(mockDishRepository.create).toHaveBeenCalledWith(dto, ingredients);
+    
+      expect(mockAiService.getIngredients).toHaveBeenCalledWith(normalizedName);
+      expect(mockDishRepository.create).toHaveBeenCalledWith(
+        { name: normalizedName },
+        ingredients,
+      );
       expect(result).toEqual(savedDish);
     });
 
@@ -55,6 +61,23 @@ describe('DishService', () => {
 
       await expect(service.create({ name: 'Sushi' })).rejects.toThrow();
       expect(mockDishRepository.create).not.toHaveBeenCalled();
+    });
+
+    it('should return cached dish without calling AI', async () => {
+      const dto = { name: 'sushi' };
+      const cachedDish = {
+        id: 'uuid',
+        name: 'sushi',
+        ingredients: ['rice', 'fish'],
+      };
+  
+      mockDishRepository.findByName = jest.fn().mockResolvedValue(cachedDish);
+  
+      const result = await service.create(dto);
+  
+      expect(mockAiService.getIngredients).not.toHaveBeenCalled();
+      expect(mockDishRepository.create).not.toHaveBeenCalled();
+      expect(result).toEqual(cachedDish);
     });
   });
 
